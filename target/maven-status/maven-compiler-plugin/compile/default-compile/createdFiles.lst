@@ -1,0 +1,7 @@
+com\trotot\model\User.class
+com\trotot\model\Role.class
+com\trotot\repository\UserRepository.class
+com\trotot\service\UserService.class
+com\trotot\controller\UserController.class
+com\trotot\dto\request\UserCreationRequest.class
+com\trotot\Trotot\TrototApplication.class
