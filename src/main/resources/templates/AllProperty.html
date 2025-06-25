@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1" name="viewport">
+    <title>Bootstrap demo</title>
+    <link crossorigin="anonymous" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css"
+          integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" rel="stylesheet">
+</head>
+<body>
+<div class="container">
+    <h1 class="text-center my-4"></h1>
+    <a class="btn btn-primary" href="/trotot/properties/create">Create Property</a>
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Title</th>
+            <th>Address</th>
+            <th>Description</th>
+            <th>Price</th>
+            <th>Status</th>
+            <th>Create At</th>
+            <th>Action</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        <tr th:each="prop:${props}">
+            <td th:text="${prop.title}"></td>
+            <td th:text="${prop.address}"></td>
+            <td th:text="${prop.description}"></td>
+            <td th:text="${prop.price}"></td>
+            <td th:text="${prop.status}"></td>
+            <td th:text="${prop.created_at.toString().substring(0,10)}"></td>
+            <td style="whie-space:nowrap">
+                <a class="btn btn-primary btn-sm" th:href="@{/properties/edit(id=${prop.id})}">Edit</a>
+                <a class="btn btn-primary btn-sm" onclick="return confirm('Are you sure?')"
+                   th:href="@{/properties/delete(id=${prop.id})}">Delete</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<script crossorigin="anonymous"
+        integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q"
+        src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
