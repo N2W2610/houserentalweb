@@ -6,8 +6,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class TrototApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(TrototApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(TrototApplication.class, args);
+    }
 
 }
