@@ -9,6 +9,10 @@
 </head>
 <body>
 <div class="container">
+    <div class="mb-3">
+        <span><b>Current user:</b> <span th:text="${currentUser}"> </span></span>
+        <span class="ms-3"><b>Role:</b> <span th:text="${currentUserRole}"></span></span>
+    </div>
     <h1 class="text-center my-4"></h1>
     <a class="btn btn-primary" href="/trotot/properties/create">Create Property</a>
     <table class="table">
@@ -28,11 +32,12 @@
         <tr th:each="prop:${props}">
             <td th:text="${prop.title}"></td>
             <td th:text="${prop.address}"></td>
+            <td th:text="${prop.category != null ? prop.category.name : 'N/A'}"></td>
             <td th:text="${prop.description}"></td>
             <td th:text="${prop.price}"></td>
             <td th:text="${prop.status}"></td>
             <td th:text="${prop.created_at.toString().substring(0,10)}"></td>
-            <td style="whie-space:nowrap">
+            <td >
                 <a class="btn btn-primary btn-sm" th:href="@{/properties/edit(id=${prop.id})}">Edit</a>
                 <a class="btn btn-primary btn-sm" onclick="return confirm('Are you sure?')"
                    th:href="@{/properties/delete(id=${prop.id})}">Delete</a>

@@ -16,33 +16,42 @@
                 <div class="row mb-3">
                     <label class="col-sm-4 col-form-label">Title</label>
                     <div class="col-sm-8">
-                        <input class="form-control" th:field="${propertyDto.title}">
-                        <p th:errorclass="text-danger" th:errors="${propertyDto.title}"
+                        <input class="form-control" th:field="*{title}">
+                        <p th:errorclass="text-danger" th:errors="*{title}"
                            th:if="${#fields.hasErrors('title')}"></p>
                     </div>
 
                     <div class="row mb-3">
                         <label class="col-sm-4 col-form-label">Address</label>
                         <div class="col-sm-8">
-                            <input class="form-control" th:field="${propertyDto.address}">
-                            <p th:errorclass="text-danger" th:errors="${propertyDto.address}"
+                            <input class="form-control" th:field="*{address}">
+                            <p th:errorclass="text-danger" th:errors="*{address}"
                                th:if="${#fields.hasErrors('address')}"></p>
                         </div>
 
                         <div class="row mb-3">
                             <label class="col-sm-4 col-form-label">Price</label>
                             <div class="col-sm-8">
-                                <input class="form-control" th:field="${propertyDto.price}">
-                                <p th:errorclass="text-danger" th:errors="${propertyDto.price}"
+                                <input class="form-control" th:field="*{price}">
+                                <p th:errorclass="text-danger" th:errors="*{price}"
                                    th:if="${#fields.hasErrors('price')}"></p>
                             </div>
 
                             <div class="row mb-3">
                                 <label class="col-sm-4 col-form-label">Description</label>
                                 <div class="col-sm-8">
-                                    <input class="form-control" th:field="${propertyDto.description}">
-                                    <p th:errorclass="text-danger" th:errors="${propertyDto.description}"
+                                    <input class="form-control" th:field="*{description}">
+                                    <p th:errorclass="text-danger" th:errors="*{description}"
                                        th:if="${#fields.hasErrors('description')}"></p>
+                                </div>
+
+                                <div class="row mb-3">
+                                <label class="col-sm-4 col-form-label">Category</label>
+                                <div class="col-sm-8">
+                                    <select class="form-select" th:field="*{category.id}">
+                                             <option value="" disabled selected>-- Chọn loại --</option>
+                                             <option th:each="cat : ${categories}" th:value="${cat.id}" th:text="${cat.name}"></option>
+                                    </select>
                                 </div>
 
                                 <div class="row">
