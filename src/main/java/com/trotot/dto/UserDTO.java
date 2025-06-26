@@ -1,11 +1,20 @@
 package com.trotot.dto;
 
+import jakarta.validation.constraints.NotEmpty;
+
 public class UserDTO {
 
+    @NotEmpty(message = "Email is required")
     private String email;
+
+    @NotEmpty(message = "Password is required")
     private String password;
+
+    @NotEmpty(message = "Phone number is required")
     private String phone;
     private String role;
+
+    @NotEmpty(message = "Full name is required")
     private String full_name;
     private int status;
     private int id;

@@ -1,18 +1,28 @@
 package com.trotot.controller;
 
 
-import com.trotot.dto.PropertyDTO;
-import com.trotot.model.Property;
-import com.trotot.repository.PropertyRepository;
-import jakarta.validation.Valid;
+import java.util.Date;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
-import java.util.Date;
-import java.util.List;
+import com.trotot.dto.PropertyDTO;
+import com.trotot.model.Property;
+import com.trotot.repository.CategoryRepository;
+import com.trotot.repository.PropertyRepository;
+
+import jakarta.validation.Valid;
 
 
 @Controller
@@ -20,9 +30,27 @@ import java.util.List;
 public class PropertyController {
     @Autowired
     private PropertyRepository propertyRepository;
+    @Autowired
+    private CategoryRepository categoryRepository;
 
     @GetMapping({"", "/"})
     public String showPropertyList(Model model) {
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    String username = (authentication != null && authentication.isAuthenticated() && !"anonymousUser".equals(authentication.getPrincipal()))
+            ? authentication.getName()
+            : "Guest";
+    model.addAttribute("currentUser", username);
+    // Determine user role
+     String userRole = "Guest";
+    if (authentication != null && authentication.isAuthenticated() && !"anonymousUser".equals(authentication.getPrincipal())) {
+        userRole = authentication.getAuthorities().stream()
+            .map(GrantedAuthority::getAuthority)
+            .findFirst()
+            .orElse("Guest");
+    }
+    model.addAttribute("currentUserRole", userRole);
+
         List<Property> props = propertyRepository.findAll();
         model.addAttribute("props", props);
         return "AllProperty";
@@ -31,6 +59,7 @@ public class PropertyController {
     @GetMapping("/create")
     public String CreatePropertyPage(Model model) {
         PropertyDTO propertyDto = new PropertyDTO();
+        model.addAttribute("categories", categoryRepository.findAll());
         model.addAttribute("propertyDto", propertyDto);
         return "CreateProperty";
     }
@@ -38,9 +67,11 @@ public class PropertyController {
     @PostMapping("/create")
     public String createProperty(
             @Valid @ModelAttribute PropertyDTO propertyDto,
-            BindingResult result
+            BindingResult result,
+            Model model
     ) {
         if (result.hasErrors()) {
+            model.addAttribute("categories", categoryRepository.findAll());
             return "CreateProperty";
         }
         Date createdAt = new Date();
@@ -51,6 +82,7 @@ public class PropertyController {
         property.setPrice(propertyDto.getPrice());
         property.setDescription(propertyDto.getDescription());
         property.setCreated_at(createdAt);
+        property.setCategory(propertyDto.getCategory());
         property.setStatus("Còn trống");
 
         propertyRepository.save(property);
@@ -72,6 +104,7 @@ public class PropertyController {
             property.setAddress(propertyDto.getAddress());
             property.setPrice(propertyDto.getPrice());
             property.setDescription(propertyDto.getDescription());
+            property.setCategory(propertyDto.getCategory());
             model.addAttribute("propertyDto", propertyDto);
 
 

@@ -1,9 +1,15 @@
 package com.trotot.model;
 
 
-import jakarta.persistence.*;
-
 import java.util.Date;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "Properties")
@@ -19,6 +25,17 @@ public class Property {
     private String address;
     private String status;
     private Date created_at;
+    @ManyToOne
+@JoinColumn(name = "category_id")
+private Category category;
+
+    public Category getCategory() {
+        return category;
+    }
+    public void setCategory(Category category) {
+        this.category = category;
+        this.category.setId(category.getId());
+    }
 
     public int getId() {
         return id;

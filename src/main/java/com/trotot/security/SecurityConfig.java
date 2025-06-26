@@ -5,6 +5,7 @@ import java.io.IOException;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
@@ -18,6 +19,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 @Configuration
+@EnableWebSecurity
     public class SecurityConfig {
 
         @Bean
@@ -26,8 +28,8 @@ import jakarta.servlet.http.HttpServletResponse;
                     .csrf(csrf -> csrf.disable())
                     .authorizeHttpRequests(auth -> auth
                             .requestMatchers("/dashboard/**").hasAnyRole("admin", "staff")
-                            .requestMatchers("/", "/login", "/register","/properties").permitAll()
-                            .anyRequest().hasAnyRole("admin", "staff", "guest", "landlorder")
+                            .requestMatchers("/", "/login", "/register","/properties/**").permitAll()
+                            .anyRequest().hasAnyRole("admin", "staff", "tenant", "landlorder")
                     )
                     .formLogin(form -> form
                             .loginPage("/login")
@@ -49,10 +51,11 @@ public void onAuthenticationSuccess(HttpServletRequest request, HttpServletRespo
                                          String contextPath = request.getContextPath(); 
     for (GrantedAuthority auth : authentication.getAuthorities()) {
         String role = auth.getAuthority();
-        if (role.equals("ROLE_admin") || role.equals("ROLE_staff")) {
+        System.out.println("User has role: " + auth.getAuthority());
+        if (role.equals("admin") || role.equals("staff")) {
             response.sendRedirect(contextPath + "/dashboard");
             return;
-        } else if (role.equals("ROLE_guest") || role.equals("ROLE_landlorder")) {
+        } else if (role.equals("tenant") || role.equals("landlorder")) {
             response.sendRedirect(contextPath + "/properties");
             return;
         }
